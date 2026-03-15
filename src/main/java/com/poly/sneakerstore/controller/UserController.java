@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseSuccess updateUser(@PathVariable String userId, @RequestBody UpdateUserRequest request){
+    public ResponseSuccess updateUser(@PathVariable String userId, @RequestBody @Valid UpdateUserRequest request){
         return new ResponseSuccess(
                 HttpStatus.ACCEPTED, "User updated successfully", userService.updateUser(userId, request)
         );
