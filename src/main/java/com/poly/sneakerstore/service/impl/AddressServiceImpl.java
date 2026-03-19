@@ -70,4 +70,10 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.clearDefaultAddress(userId);
         address.setDefaultAddress(true);
     }
+
+    @Override
+    public List<AddressResponse> getAddressByUserId(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return addressMapper.toAddressResponseList(user.getAddresses());
+    }
 }
