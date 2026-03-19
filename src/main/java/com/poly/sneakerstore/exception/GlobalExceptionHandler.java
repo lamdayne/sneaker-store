@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AppException.class})
     public ResponseFailure handleAppException(AppException e) {
         ErrorCode errorCode = e.getErrorCode();
-        return new ResponseFailure(errorCode.getHttpStatus(), errorCode.getMessage(), null);
+        return new ResponseFailure(errorCode.getHttpStatus(), errorCode.getMessage());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         } catch (IllegalArgumentException ex) {
             log.error("INVALID_KEY: {}", enumKey);
         }
-        return new ResponseFailure(errorCode.getHttpStatus(), errorCode.getMessage(), null);
+        return new ResponseFailure(errorCode.getHttpStatus(), errorCode.getMessage());
     }
 
     // HttpMessageNotReadableException lỗi khi sai field trong json body
