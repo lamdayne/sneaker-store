@@ -13,4 +13,5 @@ public interface AddressService {
     AddressResponse getAddressById(String addressId);
     List<AddressResponse> getAllAddress();
     void changeAddressDefault(String addressId, String userId);
+    List<AddressResponse> getAddressByUserId(String userId);
 }
