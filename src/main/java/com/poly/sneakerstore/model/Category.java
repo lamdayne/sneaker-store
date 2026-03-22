@@ -3,6 +3,8 @@ package com.poly.sneakerstore.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 @Getter
@@ -19,4 +21,7 @@ public class Category {
     private Integer displayOrder;
     @Column(name = "is_active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }
