@@ -3,6 +3,8 @@ package com.poly.sneakerstore.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "brands")
 @Getter
@@ -19,4 +21,7 @@ public class Brand {
     private String description;
     @Column(name = "is_active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Product> products;
 }
