@@ -12,12 +12,13 @@ import lombok.*;
 @AllArgsConstructor
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private String userId;
+    private User user;
 
-    @Column(name = "order_code")
     private String orderCode;
 
     @ManyToOne
