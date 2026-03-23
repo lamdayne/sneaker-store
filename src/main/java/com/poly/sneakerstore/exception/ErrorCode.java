@@ -38,7 +38,13 @@ public enum ErrorCode {
     FEATURED_NOT_NULL(10028, "Featured can not null", HttpStatus.BAD_REQUEST),
     BRAND_ID_NOT_BLANK(10029, "brandId can not blank", HttpStatus.BAD_REQUEST),
     CATEGORY_ID_NOT_BLANK(10030, "categoryId can not blank", HttpStatus.BAD_REQUEST),
-    ;
+    PRODUCT_ID_NOT_BLANK(10031, "Product ID cannot be blank", HttpStatus.BAD_REQUEST),
+    SIZE_NOT_BLANK(10032, "Size cannot be blank", HttpStatus.BAD_REQUEST),
+    COLOR_NOT_BLANK(10033, "Color cannot be blank", HttpStatus.BAD_REQUEST),
+    STOCK_INVALID(10034, "Stock quantity must be greater than or equal to 0", HttpStatus.BAD_REQUEST),
+    VARIANT_NOT_FOUND(10035, "Product variant not found", HttpStatus.NOT_FOUND),
+    IMAGE_NOT_FOUND(10036, "Product image not found", HttpStatus.NOT_FOUND),
+    IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST);
     private int status;
     private String message;
     private HttpStatus httpStatus;
