@@ -9,12 +9,12 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",  uses = OrderItemMapper.class)
+@Mapper(componentModel = "spring")
 public interface OrderMapper {
     Order toOrder(CreateOrderRequest request);
 
-//    @Mapping(source = "user.id", target = "userId")
-//    @Mapping(source = "shippingAddress.id", target = "shippingAddressId")
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "shippingAddress.id", target = "shippingAddressId")
     OrderResponse toOrderResponse(Order order);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

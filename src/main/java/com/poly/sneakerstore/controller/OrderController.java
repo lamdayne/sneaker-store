@@ -3,44 +3,61 @@ package com.poly.sneakerstore.controller;
 import com.poly.sneakerstore.dto.request.CreateOrderRequest;
 import com.poly.sneakerstore.dto.request.UpdateOrderRequest;
 import com.poly.sneakerstore.dto.response.OrderResponse;
+import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.OrderService;
+import com.poly.sneakerstore.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final ProductService productService;
 
     @PostMapping
-    public OrderResponse create(@RequestBody CreateOrderRequest request) {
-        return orderService.createOrder(request);
+    public ResponseSuccess createOrder(@RequestBody CreateOrderRequest request) {
+        return new ResponseSuccess(
+                HttpStatus.CREATED, "Create Order successfully", orderService.createOrder(request)
+        );
+
     }
 
     @PutMapping("/{id}")
-    public OrderResponse update(
-            @PathVariable String id,
+    public ResponseSuccess update(
+            @PathVariable("id") String id,
             @RequestBody UpdateOrderRequest request
     ) {
-        return orderService.updateOrder(id, request);
+        return new ResponseSuccess(
+                HttpStatus.ACCEPTED, "Update Order successfully", orderService.updateOrder(id, request));
+
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        orderService.deleteOrder(id);
+    public ResponseSuccess deleteOrder(@PathVariable String id) {
+        return new ResponseSuccess(
+                HttpStatus.NO_CONTENT,"Delete Order successfully"
+        );
     }
 
     @GetMapping("/{id}")
-    public OrderResponse getById(@PathVariable String id) {
-        return orderService.getOrderById(id);
+    public ResponseSuccess getById(@PathVariable String id) {
+
+        return new ResponseSuccess(
+                HttpStatus.OK,"Get order by id successfully",orderService.getOrderById(id)
+        );
     }
 
     @GetMapping
-    public List<OrderResponse> getAll() {
-        return orderService.getAllOrders();
+    public ResponseSuccess getAll() {
+
+        return new ResponseSuccess(
+                HttpStatus.OK,"Get All Order successfully",orderService.getAllOrders()
+        );
     }
 }

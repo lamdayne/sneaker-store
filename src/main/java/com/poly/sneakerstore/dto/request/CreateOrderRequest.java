@@ -30,6 +30,5 @@ public class CreateOrderRequest {
 
     private String note;
 
-    @NotNull(message = "ORDER_ITEMS_NOT_NULL")
-    private List<CreateOrderItemRequest> items;
+
 }

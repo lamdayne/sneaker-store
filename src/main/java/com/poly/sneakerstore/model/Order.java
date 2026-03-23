@@ -13,15 +13,16 @@ import lombok.*;
 public class Order {
     @Id
     private String id;
-
-    @Column(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private String userId;
 
     @Column(name = "order_code")
     private String orderCode;
 
-    @Column(name = "shipping_address_id")
-    private String shippingAddressId;
+    @ManyToOne
+    @JoinColumn(name = "shipping_address_id")
+    private Address shippingAddress;
 
     private Double subtotal;
     private Double shippingFee;
@@ -33,6 +34,5 @@ public class Order {
     private String paymentStatus;
     private String note;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+
 }
