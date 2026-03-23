@@ -1,0 +1,61 @@
+package com.poly.sneakerstore.service.impl;
+
+import com.poly.sneakerstore.dto.request.CreateOrderRequest;
+import com.poly.sneakerstore.dto.request.UpdateOrderRequest;
+import com.poly.sneakerstore.dto.response.OrderResponse;
+import com.poly.sneakerstore.mapper.OrderMapper;
+import com.poly.sneakerstore.model.Order;
+import com.poly.sneakerstore.repository.OrderRepository;
+import com.poly.sneakerstore.service.OrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+@Service
+@RequiredArgsConstructor
+public class OrderServiceImpl implements OrderService {
+
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+
+    @Override
+    public OrderResponse createOrder(CreateOrderRequest request) {
+        Order order = orderMapper.toOrder(request);
+        order = orderRepository.save(order);
+        return orderMapper.toOrderResponse(order);
+    }
+
+    @Override
+    public OrderResponse updateOrder(String id, UpdateOrderRequest request) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
+
+        orderMapper.updateOrder(request, order);
+
+        order = orderRepository.save(order);
+
+        return orderMapper.toOrderResponse(order);
+    }
+
+    @Override
+    public void deleteOrder(String id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
+
+        orderRepository.delete(order);
+    }
+
+    @Override
+    public OrderResponse getOrderById(String id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
+
+        return orderMapper.toOrderResponse(order);
+    }
+
+    @Override
+    public List<OrderResponse> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orderMapper.toOrderResponse(orders);
+    }
+}
