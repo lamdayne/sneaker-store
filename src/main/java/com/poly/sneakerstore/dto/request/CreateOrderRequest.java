@@ -22,13 +22,8 @@ public class CreateOrderRequest {
 
     @NotNull(message = "TOTAL_AMOUNT_NOT_NULL")
     private Double totalAmount;
-
     private Double shippingFee;
     private Double discountAmount;
-
     private String paymentMethod;
-
     private String note;
-
-
 }
