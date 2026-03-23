@@ -17,11 +17,15 @@ public class UpdateProductVariantRequest {
     @NotBlank(message = "COLOR_NOT_BLANK")
     private String color;
 
+    @NotBlank(message = "COLOR_HEX_NOT_BLANK")
     private String colorHex;
 
+    @NotNull(message = "STOCK_NOT_NULL")
     @Min(value = 0, message = "STOCK_INVALID")
     private Integer stockQuantity;
 
+    @NotNull(message = "PRICE_NOT_NULL")
+    @Min(value = 0, message = "PRICE_INVALID")
     private Double priceOverride;
 
     @NotNull(message = "ACTIVE_NOT_NULL")

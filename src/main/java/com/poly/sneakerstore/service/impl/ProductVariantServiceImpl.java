@@ -1,6 +1,7 @@
 package com.poly.sneakerstore.service.impl;
 
 import com.poly.sneakerstore.dto.request.CreateProductVariantRequest;
+import com.poly.sneakerstore.dto.request.UpdateProductVariantRequest;
 import com.poly.sneakerstore.dto.response.ProductVariantResponse;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductVariantServiceImpl implements ProductVariantService {
+
     private final ProductVariantRepository variantRepository;
     private final ProductRepository productRepository;
     private final ProductVariantMapper variantMapper;
@@ -45,5 +47,32 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
         variant.setActive(false);
         variantRepository.save(variant);
+    }
+
+    @Override
+    public ProductVariantResponse updateVariant(String variantId, UpdateProductVariantRequest request) {
+        ProductVariant variant = variantRepository.findById(variantId)
+                .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
+
+        variant.setSize(request.getSize());
+        variant.setColor(request.getColor());
+        variant.setColorHex(request.getColorHex());
+        variant.setStockQuantity(request.getStockQuantity());
+        variant.setPriceOverride(request.getPriceOverride());
+        variant.setActive(request.getActive());
+
+        return variantMapper.toResponse(variantRepository.save(variant));
+    }
+
+    @Override
+    public ProductVariantResponse getVariantById(String variantId) {
+        ProductVariant variant = variantRepository.findById(variantId)
+                .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
+        return variantMapper.toResponse(variant);
+    }
+
+    @Override
+    public List<ProductVariantResponse> getAllVariants() {
+        return variantMapper.toListResponse(variantRepository.findAll());
     }
 }

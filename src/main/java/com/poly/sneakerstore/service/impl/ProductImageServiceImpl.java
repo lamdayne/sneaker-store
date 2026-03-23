@@ -37,20 +37,20 @@ public class ProductImageServiceImpl implements ProductImageService {
             imageRepository.resetPrimaryImages(product.getId());
         }
 
-        ProductVariant variant = null;
-        if (request.getVariantId() != null) {
-            variant = variantRepository.findById(request.getVariantId())
-                    .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
-        }
-
         ProductImage image = ProductImage.builder()
                 .product(product)
-                .variant(variant)
                 .imageUrl(request.getImageUrl())
                 .isPrimary(request.getIsPrimary() != null && request.getIsPrimary())
                 .displayOrder(request.getDisplayOrder() != null ? request.getDisplayOrder() : 0)
                 .build();
 
+        if (request.getVariantId() != null) {
+            ProductVariant variant = variantRepository.findById(request.getVariantId())
+                    .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
+            image.setVariant(variant);
+        }
+
+        // Lưu vào DB và dùng Mapper để chuyển sang Response trước khi trả về
         return imageMapper.toResponse(imageRepository.save(image));
     }
 
