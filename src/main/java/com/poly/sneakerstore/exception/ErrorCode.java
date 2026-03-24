@@ -45,11 +45,6 @@ public enum ErrorCode {
     VARIANT_NOT_FOUND(10035, "Product variant not found", HttpStatus.NOT_FOUND),
     IMAGE_NOT_FOUND(10036, "Product image not found", HttpStatus.NOT_FOUND),
     IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST),
-<<<<<<< HEAD
-    CART_NOT_FOUND(10038, "Cart not found", HttpStatus.NOT_FOUND),
-    USER_ID_NOT_BLANK(10039, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
-    CART_ID_NOT_BLANK(10040, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
-=======
     ORDER_NOT_FOUND(10038, "Order not found", HttpStatus.NOT_FOUND),
     ORDER_ITEM_NOT_FOUND(10039, "Order item not found", HttpStatus.NOT_FOUND),
     QUANTITY_INVALID(10040, "Quantity must be greater than 0", HttpStatus.BAD_REQUEST),
@@ -64,8 +59,10 @@ public enum ErrorCode {
     IS_PRIMARY_NOT_NULL(10046, "isPrimary cannot be null", HttpStatus.BAD_REQUEST),
     TOTAL_PRICE_NOT_NULL(10047, "totalPrice cannot be null", HttpStatus.BAD_REQUEST),
     TOTAL_PRICE_INVALID(10048, "totalPrice must be greater than 0", HttpStatus.BAD_REQUEST),
-    ;
->>>>>>> 23776d4e552f404edf74befd575763d5a0910565
+    CART_NOT_FOUND(10049, "Cart not found", HttpStatus.NOT_FOUND),
+    USER_ID_NOT_BLANK(10050, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
+    CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
+
     private int status;
     private String message;
     private HttpStatus httpStatus;

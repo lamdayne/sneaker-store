@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -27,13 +25,14 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartResponse createCart(CreateCartRequest request) {
+        // 1. Tìm User
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        // 2. Tìm giỏ hàng cũ, nếu chưa có thì tạo mới (không còn expiresAt)
         Cart cart = cartRepository.findByUserId(user.getId())
                 .orElseGet(() -> cartRepository.save(Cart.builder()
                         .user(user)
-                        .expiresAt(LocalDateTime.now().plusDays(request.getDaysToLive() != null ? request.getDaysToLive() : 7))
                         .build()));
 
         return cartMapper.toResponse(cart);
@@ -47,14 +46,7 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toResponse(cart);
     }
 
-    @Override
-    @Transactional
-    public CartResponse updateCart(String id, Integer extraDays) {
-        Cart cart = cartRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
-        cart.setExpiresAt(LocalDateTime.now().plusDays(extraDays != null ? extraDays : 7));
-        return cartMapper.toResponse(cartRepository.save(cart));
-    }
+    // ĐÃ XÓA hàm updateCart vì Entity không còn field expiresAt để cập nhật
 
     @Override
     @Transactional
