@@ -45,9 +45,27 @@ public enum ErrorCode {
     VARIANT_NOT_FOUND(10035, "Product variant not found", HttpStatus.NOT_FOUND),
     IMAGE_NOT_FOUND(10036, "Product image not found", HttpStatus.NOT_FOUND),
     IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST),
+<<<<<<< HEAD
     CART_NOT_FOUND(10038, "Cart not found", HttpStatus.NOT_FOUND),
     USER_ID_NOT_BLANK(10039, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
     CART_ID_NOT_BLANK(10040, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
+=======
+    ORDER_NOT_FOUND(10038, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_ITEM_NOT_FOUND(10039, "Order item not found", HttpStatus.NOT_FOUND),
+    QUANTITY_INVALID(10040, "Quantity must be greater than 0", HttpStatus.BAD_REQUEST),
+    UNIT_PRICE_NOT_NULL(10042, "Unit price cannot be null", HttpStatus.BAD_REQUEST),
+    UNIT_PRICE_INVALID(10043, "Unit price must be greater than 0", HttpStatus.BAD_REQUEST),
+    QUANTITY_NOT_NULL(10044, "Quantity cannot be null", HttpStatus.BAD_REQUEST),
+    VARIANT_ID_NOT_BLANK(10041, "Variant id cannot be blank", HttpStatus.BAD_REQUEST),
+    PRICE_NOT_NULL(10042, "Price can not null", HttpStatus.BAD_REQUEST),
+    COLOR_HEX_NOT_BLANK(10043, "colorHex cannot be blank", HttpStatus.BAD_REQUEST),
+    STOCK_NOT_NULL(10044, "Stock cannot be null", HttpStatus.BAD_REQUEST),
+    DISPLAY_ORDER_NOT_NULL(10045, "displayOrder cannot be null", HttpStatus.BAD_REQUEST),
+    IS_PRIMARY_NOT_NULL(10046, "isPrimary cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_NOT_NULL(10047, "totalPrice cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_INVALID(10048, "totalPrice must be greater than 0", HttpStatus.BAD_REQUEST),
+    ;
+>>>>>>> 23776d4e552f404edf74befd575763d5a0910565
     private int status;
     private String message;
     private HttpStatus httpStatus;

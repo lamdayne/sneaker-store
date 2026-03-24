@@ -44,11 +44,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse updateOrder(String id, UpdateOrderRequest request) {
+        Address address = addressRepository.findById(request.getShippingAddressId())
+                .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
+
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
 
         orderMapper.updateOrder(request, order);
-
+        order.setShippingAddress(address);
         order = orderRepository.save(order);
 
         return orderMapper.toOrderResponse(order);
