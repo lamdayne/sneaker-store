@@ -51,7 +51,15 @@ public enum ErrorCode {
     UNIT_PRICE_NOT_NULL(10042, "Unit price cannot be null", HttpStatus.BAD_REQUEST),
     UNIT_PRICE_INVALID(10043, "Unit price must be greater than 0", HttpStatus.BAD_REQUEST),
     QUANTITY_NOT_NULL(10044, "Quantity cannot be null", HttpStatus.BAD_REQUEST),
-    VARIANT_ID_NOT_BLANK(10041, "Variant id cannot be blank", HttpStatus.BAD_REQUEST);
+    VARIANT_ID_NOT_BLANK(10041, "Variant id cannot be blank", HttpStatus.BAD_REQUEST),
+    PRICE_NOT_NULL(10042, "Price can not null", HttpStatus.BAD_REQUEST),
+    COLOR_HEX_NOT_BLANK(10043, "colorHex cannot be blank", HttpStatus.BAD_REQUEST),
+    STOCK_NOT_NULL(10044, "Stock cannot be null", HttpStatus.BAD_REQUEST),
+    DISPLAY_ORDER_NOT_NULL(10045, "displayOrder cannot be null", HttpStatus.BAD_REQUEST),
+    IS_PRIMARY_NOT_NULL(10046, "isPrimary cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_NOT_NULL(10047, "totalPrice cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_INVALID(10048, "totalPrice must be greater than 0", HttpStatus.BAD_REQUEST),
+    ;
     private int status;
     private String message;
     private HttpStatus httpStatus;
