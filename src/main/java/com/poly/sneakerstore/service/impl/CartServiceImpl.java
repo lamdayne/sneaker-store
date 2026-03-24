@@ -1,79 +1,63 @@
 package com.poly.sneakerstore.service.impl;
 
-import com.poly.sneakerstore.dto.request.CartRequest;
+import com.poly.sneakerstore.dto.request.CreateCartRequest;
 import com.poly.sneakerstore.dto.response.CartResponse;
 import com.poly.sneakerstore.mapper.CartMapper;
-import com.poly.sneakerstore.model.*;
-import com.poly.sneakerstore.repository.*;
+import com.poly.sneakerstore.model.Cart;
+import com.poly.sneakerstore.model.User;
+import com.poly.sneakerstore.repository.CartRepository;
+import com.poly.sneakerstore.repository.UserRepository;
 import com.poly.sneakerstore.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
+
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
-    private final ProductVariantRepository variantRepository;
     private final CartMapper cartMapper;
 
     @Override
-    public List<CartResponse> getMyCart(String userId) {
-        return cartRepository.findByUserId(userId).stream()
-                .map(cartMapper::toCartResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     @Transactional
-    public void addToCart(String userId, CartRequest request) {
-        User user = userRepository.findById(userId)
+    public CartResponse createCart(CreateCartRequest request) {
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        ProductVariant variant = variantRepository.findById(request.getProductVariantId())
-                .orElseThrow(() -> new RuntimeException("Product variant not found"));
+        Cart cart = cartRepository.findByUserId(user.getId())
+                .orElseGet(() -> cartRepository.save(Cart.builder()
+                        .user(user)
+                        .expiresAt(LocalDateTime.now().plusDays(request.getDaysToLive() != null ? request.getDaysToLive() : 7))
+                        .build()));
 
-        cartRepository.findByUserIdAndProductVariantId(userId, request.getProductVariantId())
-                .ifPresentOrElse(
-                        existingCart -> {
-                            existingCart.setQuantity(existingCart.getQuantity() + request.getQuantity());
-                            cartRepository.save(existingCart);
-                        },
-                        () -> cartRepository.save(Cart.builder()
-                                .user(user)
-                                .productVariant(variant)
-                                .quantity(request.getQuantity())
-                                .build())
-                );
+        return cartMapper.toResponse(cart);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CartResponse getCartByUserId(String userId) {
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
+        return cartMapper.toResponse(cart);
     }
 
     @Override
     @Transactional
-    public void updateQuantity(Long cartId, int quantity) {
-        Cart cart = cartRepository.findById(cartId)
+    public CartResponse updateCart(String id, Integer extraDays) {
+        Cart cart = cartRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
-        if (quantity <= 0) {
-            cartRepository.delete(cart);
-        } else {
-            cart.setQuantity(quantity);
-            cartRepository.save(cart);
-        }
+        cart.setExpiresAt(LocalDateTime.now().plusDays(extraDays != null ? extraDays : 7));
+        return cartMapper.toResponse(cartRepository.save(cart));
     }
 
     @Override
     @Transactional
-    public void removeFromCart(Long cartId) {
-        cartRepository.deleteById(cartId);
-    }
-
-    @Override
-    @Transactional
-    public void clearCart(String userId) {
-        List<Cart> items = cartRepository.findByUserId(userId);
-        cartRepository.deleteAll(items);
+    public void deleteCart(String id) {
+        if (!cartRepository.existsById(id)) throw new RuntimeException("Cart not found");
+        cartRepository.deleteById(id);
     }
 }

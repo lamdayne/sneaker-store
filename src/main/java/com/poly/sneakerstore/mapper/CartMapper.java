@@ -7,11 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CartMapper {
-
-    @Mapping(source = "productVariant.product.name", target = "productName")
-    @Mapping(source = "productVariant.size.name", target = "size")
-    @Mapping(source = "productVariant.color.name", target = "color")
-    @Mapping(source = "productVariant.price", target = "price")
-    @Mapping(source = "productVariant.product.avatarUrl", target = "imageUrl")
-    CartResponse toCartResponse(Cart cart);
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.fullName", target = "userFullName")
+    CartResponse toResponse(Cart cart);
 }

@@ -1,15 +1,13 @@
 package com.poly.sneakerstore.dto.response;
 
 import lombok.*;
+import java.time.LocalDateTime;
 
-@Data
-@Builder
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class CartResponse {
-    private Long id;
-    private String productName;
-    private String size;
-    private String color;
-    private double price;
-    private int quantity;
-    private String imageUrl;
+    private String id;
+    private String userId;
+    private String userFullName;
+    private LocalDateTime expiresAt;
 }
