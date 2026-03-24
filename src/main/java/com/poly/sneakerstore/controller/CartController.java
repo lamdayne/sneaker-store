@@ -23,15 +23,6 @@ public class CartController {
         );
     }
 
-    @PutMapping("/{cartId}")
-    public ResponseSuccess update(@PathVariable String cartId, @RequestParam Integer extraDays) {
-        return new ResponseSuccess(
-                HttpStatus.ACCEPTED,
-                "Updated cart expiry successfully",
-                cartService.updateCart(cartId, extraDays)
-        );
-    }
-
     @GetMapping("/user/{userId}")
     public ResponseSuccess getByUser(@PathVariable String userId) {
         return new ResponseSuccess(

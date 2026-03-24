@@ -46,7 +46,6 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toResponse(cart);
     }
 
-    // ĐÃ XÓA hàm updateCart vì Entity không còn field expiresAt để cập nhật
 
     @Override
     @Transactional
