@@ -18,7 +18,7 @@ public class UpdateOrderItemRequest {
     @NotBlank(message = "COLOR_NOT_BLANK")
     private String color;
 
-    @NotBlank(message = "QUANTITY_NOT_NULL")
+    @NotNull(message = "QUANTITY_NOT_NULL")
     @Min(value = 1, message = "QUANTITY_INVALID")
     private Integer quantity;
 
@@ -26,6 +26,7 @@ public class UpdateOrderItemRequest {
     @Min(value = 1, message = "UNIT_PRICE_INVALID")
     private Double unitPrice;
 
-
+    @NotNull(message = "TOTAL_PRICE_NOT_NULL")
+    @Min(value = 1, message = "TOTAL_PRICE_INVALID")
     private Double totalPrice;
 }
