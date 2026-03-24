@@ -8,6 +8,5 @@ import java.time.LocalDateTime;
 public class CartResponse {
     private String id;
     private String userId;
-    private String userFullName;
-    private LocalDateTime expiresAt;
+
 }

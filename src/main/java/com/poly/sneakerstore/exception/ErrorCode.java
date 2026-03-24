@@ -44,7 +44,10 @@ public enum ErrorCode {
     STOCK_INVALID(10034, "Stock quantity must be greater than or equal to 0", HttpStatus.BAD_REQUEST),
     VARIANT_NOT_FOUND(10035, "Product variant not found", HttpStatus.NOT_FOUND),
     IMAGE_NOT_FOUND(10036, "Product image not found", HttpStatus.NOT_FOUND),
-    IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST);
+    IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST),
+    CART_NOT_FOUND(10038, "Cart not found", HttpStatus.NOT_FOUND),
+    USER_ID_NOT_BLANK(10039, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
+    CART_ID_NOT_BLANK(10040, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
     private int status;
     private String message;
     private HttpStatus httpStatus;
