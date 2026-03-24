@@ -32,10 +32,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     @Transactional
     public OrderItemResponse create(CreateOrderItemRequest request) {
-        if (request.getQuantity() <= 0) {
-            throw new AppException(ErrorCode.QUANTITY_INVALID);
-        }
-
+       
         Order order = orderRepository.findById(request.getOrderId())
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
