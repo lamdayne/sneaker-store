@@ -56,6 +56,8 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Override
     public List<ProductImageResponse> getImagesByProductId(String productId) {
+        productRepository.findById(productId)
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         return imageMapper.toResponseList(imageRepository.findByProductId(productId));
     }
 
