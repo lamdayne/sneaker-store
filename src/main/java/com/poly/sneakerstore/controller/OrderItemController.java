@@ -6,6 +6,7 @@ import com.poly.sneakerstore.dto.request.UpdateOrderItemRequest;
 import com.poly.sneakerstore.dto.response.OrderItemResponse;
 import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.OrderItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     @PostMapping
-    public ResponseSuccess create(@RequestBody CreateOrderItemRequest request) {
+    public ResponseSuccess create(@RequestBody @Valid CreateOrderItemRequest request) {
         return new ResponseSuccess(
                 HttpStatus.CREATED,
                 "Create order item success",
@@ -46,7 +47,7 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseSuccess update(@PathVariable String id, @RequestBody UpdateOrderItemRequest request) {
+    public ResponseSuccess update(@PathVariable String id, @RequestBody @Valid UpdateOrderItemRequest request) {
         return new ResponseSuccess(
                 HttpStatus.ACCEPTED,
                 "Update order item success",
