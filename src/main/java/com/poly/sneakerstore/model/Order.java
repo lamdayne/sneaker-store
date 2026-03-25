@@ -14,12 +14,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+  
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    @Column(name = "order_code")
     private String orderCode;
 
     @ManyToOne(fetch = FetchType.LAZY)

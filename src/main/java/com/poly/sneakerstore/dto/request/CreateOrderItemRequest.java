@@ -1,0 +1,21 @@
+package com.poly.sneakerstore.dto.request;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+public class CreateOrderItemRequest {
+
+    @NotBlank(message = "ORDER_ID_NOT_BLANK")
+    private String orderId;
+
+    @NotBlank(message = "VARIANT_ID_NOT_BLANK")
+    private String variantId;
+
+
+    @NotNull(message = "QUANTITY_NOT_NULL")
+    @Min(value = 1, message = "QUANTITY_INVALID")
+    private Integer quantity;
+}

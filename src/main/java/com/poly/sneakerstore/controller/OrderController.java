@@ -17,15 +17,16 @@ import java.util.List;
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
+
     private final OrderService orderService;
-    private final ProductService productService;
 
     @PostMapping
     public ResponseSuccess createOrder(@RequestBody CreateOrderRequest request) {
         return new ResponseSuccess(
-                HttpStatus.CREATED, "Create Order successfully", orderService.createOrder(request)
+                HttpStatus.CREATED,
+                "Create Order successfully",
+                orderService.createOrder(request)
         );
-
     }
 
     @PutMapping("/{id}")
@@ -34,8 +35,10 @@ public class OrderController {
             @RequestBody UpdateOrderRequest request
     ) {
         return new ResponseSuccess(
-                HttpStatus.ACCEPTED, "Update Order successfully", orderService.updateOrder(id, request));
-
+                HttpStatus.ACCEPTED,
+                "Update Order successfully",
+                orderService.updateOrder(id, request)
+        );
     }
 
     @DeleteMapping("/{id}")
@@ -49,15 +52,18 @@ public class OrderController {
     public ResponseSuccess getById(@PathVariable String id) {
 
         return new ResponseSuccess(
-                HttpStatus.OK,"Get order by id successfully",orderService.getOrderById(id)
+                HttpStatus.OK,
+                "Get order by id successfully",
+                orderService.getOrderById(id)
         );
     }
 
     @GetMapping
     public ResponseSuccess getAll() {
-
         return new ResponseSuccess(
-                HttpStatus.OK,"Get All Order successfully",orderService.getAllOrders()
+                HttpStatus.OK,
+                "Get all order successfully",
+                orderService.getAllOrders()
         );
     }
 }

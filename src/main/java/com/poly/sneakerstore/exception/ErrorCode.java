@@ -38,7 +38,31 @@ public enum ErrorCode {
     FEATURED_NOT_NULL(10028, "Featured can not null", HttpStatus.BAD_REQUEST),
     BRAND_ID_NOT_BLANK(10029, "brandId can not blank", HttpStatus.BAD_REQUEST),
     CATEGORY_ID_NOT_BLANK(10030, "categoryId can not blank", HttpStatus.BAD_REQUEST),
-    ;
+    PRODUCT_ID_NOT_BLANK(10031, "Product ID cannot be blank", HttpStatus.BAD_REQUEST),
+    SIZE_NOT_BLANK(10032, "Size cannot be blank", HttpStatus.BAD_REQUEST),
+    COLOR_NOT_BLANK(10033, "Color cannot be blank", HttpStatus.BAD_REQUEST),
+    STOCK_INVALID(10034, "Stock quantity must be greater than or equal to 0", HttpStatus.BAD_REQUEST),
+    VARIANT_NOT_FOUND(10035, "Product variant not found", HttpStatus.NOT_FOUND),
+    IMAGE_NOT_FOUND(10036, "Product image not found", HttpStatus.NOT_FOUND),
+    IMAGE_URL_NOT_BLANK(10037, "Image URL cannot be blank", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(10038, "Order not found", HttpStatus.NOT_FOUND),
+    ORDER_ITEM_NOT_FOUND(10039, "Order item not found", HttpStatus.NOT_FOUND),
+    QUANTITY_INVALID(10040, "Quantity must be greater than 0", HttpStatus.BAD_REQUEST),
+    UNIT_PRICE_NOT_NULL(10042, "Unit price cannot be null", HttpStatus.BAD_REQUEST),
+    UNIT_PRICE_INVALID(10043, "Unit price must be greater than 0", HttpStatus.BAD_REQUEST),
+    QUANTITY_NOT_NULL(10044, "Quantity cannot be null", HttpStatus.BAD_REQUEST),
+    VARIANT_ID_NOT_BLANK(10041, "Variant id cannot be blank", HttpStatus.BAD_REQUEST),
+    PRICE_NOT_NULL(10042, "Price can not null", HttpStatus.BAD_REQUEST),
+    COLOR_HEX_NOT_BLANK(10043, "colorHex cannot be blank", HttpStatus.BAD_REQUEST),
+    STOCK_NOT_NULL(10044, "Stock cannot be null", HttpStatus.BAD_REQUEST),
+    DISPLAY_ORDER_NOT_NULL(10045, "displayOrder cannot be null", HttpStatus.BAD_REQUEST),
+    IS_PRIMARY_NOT_NULL(10046, "isPrimary cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_NOT_NULL(10047, "totalPrice cannot be null", HttpStatus.BAD_REQUEST),
+    TOTAL_PRICE_INVALID(10048, "totalPrice must be greater than 0", HttpStatus.BAD_REQUEST),
+    CART_NOT_FOUND(10049, "Cart not found", HttpStatus.NOT_FOUND),
+    USER_ID_NOT_BLANK(10050, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
+    CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
+
     private int status;
     private String message;
     private HttpStatus httpStatus;
