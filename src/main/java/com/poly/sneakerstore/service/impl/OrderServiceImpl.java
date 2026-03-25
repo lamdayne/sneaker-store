@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -21,6 +23,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse createOrder(CreateOrderRequest request) {
         Order order = orderMapper.toOrder(request);
+        order.setOrderCode("ORD-" + UUID.randomUUID().toString().substring(0,8));
+        order.setStatus("PENDING");
+        order.setPaymentStatus("UNPAID");
         order = orderRepository.save(order);
         return orderMapper.toOrderResponse(order);
     }
