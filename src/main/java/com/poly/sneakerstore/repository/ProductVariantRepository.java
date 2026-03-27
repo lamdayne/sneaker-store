@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, String> {
     List<ProductVariant> findByProductId(String productId);
+    boolean existsByProductIdAndSizeAndColorAndColorHexAndStockQuantityAndPriceOverride(
+            String productId, String size, String color, String colorHex, Integer stockQuantity, Double priceOverride
+    );
 }
