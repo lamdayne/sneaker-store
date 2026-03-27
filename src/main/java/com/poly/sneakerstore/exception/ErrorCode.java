@@ -63,6 +63,7 @@ public enum ErrorCode {
     USER_ID_NOT_BLANK(10050, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
     CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST),
     ADDRESS_ID_NOT_BLANK(10052, "Address ID cannot be blank", HttpStatus.BAD_REQUEST),
+    VARIANT_EXISTS(10038, "Product variant with these details already exists", HttpStatus.BAD_REQUEST),
     ;
     private int status;
     private String message;
