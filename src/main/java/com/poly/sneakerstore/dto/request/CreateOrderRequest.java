@@ -17,9 +17,6 @@ public class CreateOrderRequest {
     @NotBlank(message = "ADDRESS_ID_NOT_BLANK")
     private String shippingAddressId;
 
-    @NotBlank(message = "ORDER_CODE_NOT_BLANK")
-    private String orderCode;
-
     @NotNull(message = "SUBTOTAL_NOT_NULL")
     private Double subtotal;
 

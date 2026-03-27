@@ -19,7 +19,6 @@ public interface OrderMapper {
     OrderResponse toOrderResponse(Order order);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-
     void updateOrder(UpdateOrderRequest request, @MappingTarget Order order);
 
     List<OrderResponse> toOrderResponse(List<Order> orders);

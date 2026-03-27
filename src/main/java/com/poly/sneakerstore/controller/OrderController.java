@@ -6,6 +6,7 @@ import com.poly.sneakerstore.dto.response.OrderResponse;
 import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.OrderService;
 import com.poly.sneakerstore.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseSuccess createOrder(@RequestBody CreateOrderRequest request) {
+    public ResponseSuccess createOrder(@RequestBody @Valid CreateOrderRequest request) {
         return new ResponseSuccess(
                 HttpStatus.CREATED,
                 "Create Order successfully",
@@ -32,7 +33,7 @@ public class OrderController {
     @PutMapping("/{id}")
     public ResponseSuccess update(
             @PathVariable("id") String id,
-            @RequestBody UpdateOrderRequest request
+            @RequestBody @Valid UpdateOrderRequest request
     ) {
         return new ResponseSuccess(
                 HttpStatus.ACCEPTED,
@@ -43,6 +44,7 @@ public class OrderController {
 
     @DeleteMapping("/{id}")
     public ResponseSuccess deleteOrder(@PathVariable String id) {
+        orderService.deleteOrder(id);
         return new ResponseSuccess(
                 HttpStatus.NO_CONTENT,"Delete Order successfully"
         );
@@ -50,7 +52,6 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseSuccess getById(@PathVariable String id) {
-
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get order by id successfully",
