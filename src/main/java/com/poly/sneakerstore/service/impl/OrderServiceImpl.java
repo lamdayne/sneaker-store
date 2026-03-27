@@ -3,6 +3,7 @@ package com.poly.sneakerstore.service.impl;
 import com.poly.sneakerstore.dto.request.CreateOrderRequest;
 import com.poly.sneakerstore.dto.request.UpdateOrderRequest;
 import com.poly.sneakerstore.dto.response.OrderResponse;
+import com.poly.sneakerstore.enums.OrderStatus;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
 import com.poly.sneakerstore.mapper.OrderMapper;
@@ -16,6 +17,7 @@ import com.poly.sneakerstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,8 +40,11 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderMapper.toOrder(request);
         order.setOrderCode("ORD-" + UUID.randomUUID().toString().substring(0,8));
-        order.setStatus("PENDING");
+        order.setStatus(OrderStatus.PENDING.name());
         order.setPaymentStatus("UNPAID");
+        order.setShippingAddress(address);
+        order.setUser(user);
+        order.setCreatedAt(LocalDateTime.now());
         order = orderRepository.save(order);
         return orderMapper.toOrderResponse(order);
     }
@@ -62,15 +67,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(String id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
-
-        orderRepository.delete(order);
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        order.setStatus(OrderStatus.CANCELLED.name());
+        orderRepository.save(order);
     }
 
     @Override
     public OrderResponse getOrderById(String id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("ORDER_NOT_FOUND"));
+                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
         return orderMapper.toOrderResponse(order);
     }
@@ -79,10 +84,5 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orderMapper.toOrderResponse(orders);
-    }
-
-    private String generateOrderCode() {
-        long time = System.currentTimeMillis();
-        return "ORD" + time;
     }
 }

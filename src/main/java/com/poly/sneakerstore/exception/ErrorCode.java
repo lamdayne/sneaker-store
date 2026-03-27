@@ -61,8 +61,9 @@ public enum ErrorCode {
     TOTAL_PRICE_INVALID(10048, "totalPrice must be greater than 0", HttpStatus.BAD_REQUEST),
     CART_NOT_FOUND(10049, "Cart not found", HttpStatus.NOT_FOUND),
     USER_ID_NOT_BLANK(10050, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
-    CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST);
-
+    CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST),
+    ADDRESS_ID_NOT_BLANK(10052, "Address ID cannot be blank", HttpStatus.BAD_REQUEST),
+    ;
     private int status;
     private String message;
     private HttpStatus httpStatus;

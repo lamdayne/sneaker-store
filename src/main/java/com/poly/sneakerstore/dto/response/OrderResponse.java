@@ -25,6 +25,4 @@ public class OrderResponse {
     private String note;
 
     private LocalDateTime createdAt;
-
-
 }

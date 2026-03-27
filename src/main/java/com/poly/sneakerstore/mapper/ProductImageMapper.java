@@ -13,6 +13,7 @@ public interface ProductImageMapper {
 
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "variant.id", target = "variantId")
+    @Mapping(source = "primary", target = "isPrimary")
     ProductImageResponse toResponse(ProductImage productImage);
 
     List<ProductImageResponse> toResponseList(List<ProductImage> productImages);

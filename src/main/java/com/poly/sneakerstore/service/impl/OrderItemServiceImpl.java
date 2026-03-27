@@ -45,7 +45,7 @@ public class OrderItemServiceImpl implements OrderItemService {
             throw new AppException(ErrorCode.STOCK_INVALID);
         }
 
-        Double price = variant.getPriceOverride() != null
+        Double price = (variant.getPriceOverride() != null && variant.getPriceOverride() != 0)
                 ? variant.getPriceOverride()
                 : product.getBasePrice();
 
