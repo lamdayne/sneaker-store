@@ -13,9 +13,11 @@ import com.poly.sneakerstore.model.Product;
 import com.poly.sneakerstore.repository.BrandRepository;
 import com.poly.sneakerstore.repository.CategoryRepository;
 import com.poly.sneakerstore.repository.ProductRepository;
+import com.poly.sneakerstore.repository.SearchRepository;
 import com.poly.sneakerstore.repository.specification.ProductSearchBuilder;
 import com.poly.sneakerstore.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final SearchRepository searchRepository;
 
     @Override
     public ProductResponse createProduct(CreateProductRequest request) {
@@ -89,9 +92,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageResponse<?> search(Pageable pageable, String[] product, String[] variant) {
+        Page<Product> pageProduct = null;
 
         if (product != null && variant != null) {
-
+            return searchRepository.getProductJoinedVariant(pageable, product, variant);
         } else if (product != null) {
             ProductSearchBuilder builder = new ProductSearchBuilder();
 
@@ -110,7 +114,15 @@ public class ProductServiceImpl implements ProductService {
                     .pageSize(pageable.getPageSize())
                     .items(productMapper.toProductResponse(products))
                     .build();
+        } else {
+            pageProduct = productRepository.findAll(pageable);
         }
-        return null;
+
+        return PageResponse.builder()
+                .pageNo(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .totalPage(pageProduct.getTotalPages())
+                .items(productMapper.toProductResponse(pageProduct.stream().toList()))
+                .build();
     }
 }
