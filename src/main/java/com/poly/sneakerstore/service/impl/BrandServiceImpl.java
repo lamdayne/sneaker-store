@@ -3,13 +3,17 @@ package com.poly.sneakerstore.service.impl;
 import com.poly.sneakerstore.dto.request.CreateBrandRequest;
 import com.poly.sneakerstore.dto.request.UpdateBrandRequest;
 import com.poly.sneakerstore.dto.response.BrandResponse;
+import com.poly.sneakerstore.dto.response.PageResponse;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
 import com.poly.sneakerstore.mapper.BrandMapper;
 import com.poly.sneakerstore.model.Brand;
 import com.poly.sneakerstore.repository.BrandRepository;
 import com.poly.sneakerstore.service.BrandService;
+import com.poly.sneakerstore.util.PageableUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +24,7 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
     private final BrandMapper brandMapper;
+    private final PageableUtil pageableUtil;
 
     @Override
     public BrandResponse createBrand(CreateBrandRequest request) {
@@ -53,8 +58,17 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<BrandResponse> findAllBrands() {
-        return brandMapper.toBrandResponseList(brandRepository.findAll());
+    public PageResponse<?> findAllBrands(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = pageableUtil.createPageable(pageNo, pageSize, sortBy);
+        Page<Brand> brands = brandRepository.findAll(pageable);
+        List<BrandResponse> response = brands.stream().map(brandMapper::toBrandResponse).toList();
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPage(brands.getTotalPages())
+                .totalElements((int) brands.getTotalElements())
+                .items(response)
+                .build();
     }
 
     @Override
