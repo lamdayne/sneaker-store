@@ -50,11 +50,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseSuccess getAllProducts() {
+    public ResponseSuccess getAllProducts(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "8", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get all product successfully",
-                productService.findAll()
+                productService.findAll(pageNo, pageSize, sortBy)
         );
     }
 
