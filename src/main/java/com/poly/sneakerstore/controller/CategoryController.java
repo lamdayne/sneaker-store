@@ -53,11 +53,24 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseSuccess getAllCategories() {
+    public ResponseSuccess getAllCategories(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "5", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get all categories successfully",
-                categoryService.getAllCategories()
+                categoryService.getAllCategories(pageNo, pageSize, sortBy)
+        );
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseSuccess changeStatus(@PathVariable String categoryId, @RequestParam Boolean status) {
+        categoryService.changeStatus(categoryId, status);
+        return new ResponseSuccess(
+                HttpStatus.ACCEPTED,
+                "Change status successfully"
         );
     }
 
