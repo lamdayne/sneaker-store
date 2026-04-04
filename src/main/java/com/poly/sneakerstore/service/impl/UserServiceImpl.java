@@ -2,6 +2,7 @@ package com.poly.sneakerstore.service.impl;
 
 import com.poly.sneakerstore.dto.request.CreateUserRequest;
 import com.poly.sneakerstore.dto.request.UpdateUserRequest;
+import com.poly.sneakerstore.dto.response.PageResponse;
 import com.poly.sneakerstore.dto.response.UserResponse;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
@@ -10,7 +11,11 @@ import com.poly.sneakerstore.model.Role;
 import com.poly.sneakerstore.model.User;
 import com.poly.sneakerstore.repository.UserRepository;
 import com.poly.sneakerstore.service.UserService;
+import com.poly.sneakerstore.util.PageableUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final PageableUtil pageableUtil;
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {
@@ -33,6 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.PHONE_EXISTS);
         }
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAvatarUrl("https://files.catbox.moe/lonccy.jpg"); // AVATAR DEFAULT
         user.setActive(true);
         user.setRole(Role.USER);
@@ -54,6 +62,7 @@ public class UserServiceImpl implements UserService {
         }
 
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUpdatedAt(LocalDateTime.now());
 
         return userMapper.toUserResponse(userRepository.save(user));
@@ -75,7 +84,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        return userMapper.toUserResponseList(userRepository.findAll());
+    public PageResponse<?> getAllUsers(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = pageableUtil.createPageable(pageNo, pageSize, sortBy);
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserResponse> response = users.stream().map(userMapper::toUserResponse).toList();
+
+        return PageResponse.builder()
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalPage(users.getTotalPages())
+                .totalElements((int) users.getTotalElements())
+                .items(response)
+                .build();
     }
 }

@@ -63,6 +63,7 @@ public enum ErrorCode {
     USER_ID_NOT_BLANK(10050, "User ID cannot be blank", HttpStatus.BAD_REQUEST),
     CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST),
     ADDRESS_ID_NOT_BLANK(10052, "Address ID cannot be blank", HttpStatus.BAD_REQUEST),
+    UNAUTHENTICATED(10053, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     ;
     private int status;
     private String message;

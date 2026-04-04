@@ -45,9 +45,15 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseSuccess getAllUsers(){
+    public ResponseSuccess getAllUsers(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "8", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ){
         return new ResponseSuccess(
-                HttpStatus.OK, "Get users successfully", userService.getAllUsers()
+                HttpStatus.OK,
+                "Get users successfully",
+                userService.getAllUsers(pageNo, pageSize, sortBy)
         );
     }
 
