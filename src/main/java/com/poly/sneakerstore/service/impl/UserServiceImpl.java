@@ -15,6 +15,9 @@ import com.poly.sneakerstore.util.PageableUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<?> getAllUsers(int pageNo, int pageSize, String sortBy) {
         Pageable pageable = pageableUtil.createPageable(pageNo, pageSize, sortBy);
         Page<User> users = userRepository.findAll(pageable);
@@ -96,5 +100,14 @@ public class UserServiceImpl implements UserService {
                 .totalElements((int) users.getTotalElements())
                 .items(response)
                 .build();
+    }
+
+    @Override
+    public UserResponse myInfo() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponse(user);
     }
 }
