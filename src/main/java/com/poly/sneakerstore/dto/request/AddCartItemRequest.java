@@ -11,9 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 public class AddCartItemRequest {
 
-    @NotBlank(message = "USER_ID_NOT_BLANK")
-    private String userId;
-
     @NotBlank(message = "PRODUCT_ID_NOT_BLANK")
     private String productId;
 

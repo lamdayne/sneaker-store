@@ -9,6 +9,7 @@ import com.poly.sneakerstore.model.*;
 import com.poly.sneakerstore.repository.*;
 import com.poly.sneakerstore.service.CartItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,9 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemResponse addCartItem(AddCartItemRequest request) {
-        User user = userRepository.findById(request.getUserId())
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         Product product = productRepository.findById(request.getProductId())
