@@ -4,8 +4,7 @@ import com.poly.sneakerstore.dto.request.CreateProductRequest;
 import com.poly.sneakerstore.dto.request.UpdateProductRequest;
 import com.poly.sneakerstore.dto.response.PageResponse;
 import com.poly.sneakerstore.dto.response.ProductResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
     ProductResponse createProduct(CreateProductRequest request);
@@ -13,4 +12,5 @@ public interface ProductService {
     void deleteProduct(String id);
     ProductResponse findById(String id);
     PageResponse<?> findAll(int pageNo, int pageSize, String sortBy);
+    PageResponse<?> search(Pageable pageable, String[] product, String[] variant);
 }
