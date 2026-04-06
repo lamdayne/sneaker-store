@@ -64,6 +64,7 @@ public enum ErrorCode {
     CART_ID_NOT_BLANK(10051, "Cart ID cannot be blank", HttpStatus.BAD_REQUEST),
     ADDRESS_ID_NOT_BLANK(10052, "Address ID cannot be blank", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(10053, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    CART_ITEM_NOT_FOUND(10054, "Cart item not found", HttpStatus.NOT_FOUND),
     ;
     private int status;
     private String message;

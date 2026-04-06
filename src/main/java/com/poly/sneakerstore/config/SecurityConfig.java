@@ -1,20 +1,46 @@
 package com.poly.sneakerstore.config;
 
+import com.nimbusds.jose.crypto.MACSigner;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+
+import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 public class SecurityConfig {
 
+    @Value("${jwt.signer-key}")
+    private String signerKey;
+
     private final String[] PUBLIC_ENDPOINTS = {
             "/users",
-            "/auth/token"
+            "/auth/token",
+            "/auth/introspect",
+            "/auth/logout"
+    };
+
+    private final String[] RESOURCE_PUBLIC_ENDPOINTS = {
+            "/brands/**",
+            "/products/**",
+            "/products/search/**",
+            "/categories",
+            "/cart-items/**"
     };
 
     @Bean
@@ -22,12 +48,41 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers(HttpMethod.GET, RESOURCE_PUBLIC_ENDPOINTS).permitAll()
+                                .anyRequest().authenticated()
                 );
 
+        http.oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwtConfigurer ->
+                        jwtConfigurer
+                                .decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
 
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter granted = new JwtGrantedAuthoritiesConverter();
+        granted.setAuthorityPrefix("ROLE_");
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(granted);
+        return converter;
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), MacAlgorithm.HS512.name());
+        return NimbusJwtDecoder
+                .withSecretKey(secretKeySpec)
+                .macAlgorithm(MacAlgorithm.HS512)
+                .build();
     }
 
     @Bean

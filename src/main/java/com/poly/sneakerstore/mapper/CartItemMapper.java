@@ -9,7 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CartItemMapper {
     CartItem toCartItem(AddCartItemRequest request);
-    @Mapping(source = "cart.id", target = "cartId")
-    @Mapping(source = "variant.id", target = "variantId")
-    CartItemResponse toResponse(CartItem cartItem);
+
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "product.id", target = "productId")
+    CartItemResponse toCartItemResponse(CartItem cartItem);
 }

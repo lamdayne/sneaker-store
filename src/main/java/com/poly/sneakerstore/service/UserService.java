@@ -13,4 +13,5 @@ public interface UserService {
     void deleteUser(String userId);
     UserResponse getUserById(String userId);
     PageResponse<?> getAllUsers(int pageNo, int pageSize, String sortBy);
+    UserResponse myInfo();
 }
