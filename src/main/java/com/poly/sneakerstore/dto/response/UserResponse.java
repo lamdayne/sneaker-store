@@ -5,6 +5,7 @@ import com.poly.sneakerstore.model.Role;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +22,7 @@ public class UserResponse {
     private Role role;
     @JsonProperty("isActive")
     private boolean active;
+    private List<AddressResponse> addresses;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

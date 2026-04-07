@@ -32,4 +32,13 @@ public class CartItemController {
         );
     }
 
+    @GetMapping("/my-cart")
+    public ResponseSuccess getMyCart() {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Get cart items successfully",
+                cartItemService.getMyCartItem()
+        );
+    }
+
 }

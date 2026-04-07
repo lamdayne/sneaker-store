@@ -8,13 +8,15 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { AddressMapper.class })
 public interface UserMapper {
     User toUser(CreateUserRequest request);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE) // NOT MAP NULL PROPERTY
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        // NOT MAP NULL PROPERTY
     void updateUser(@MappingTarget User user, UpdateUserRequest request);
 
     UserResponse toUserResponse(User user);
+
     List<UserResponse> toUserResponseList(List<User> users);
 }
