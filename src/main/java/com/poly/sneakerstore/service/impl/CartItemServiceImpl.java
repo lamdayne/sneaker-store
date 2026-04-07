@@ -9,11 +9,10 @@ import com.poly.sneakerstore.model.*;
 import com.poly.sneakerstore.repository.*;
 import com.poly.sneakerstore.service.CartItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,6 +34,13 @@ public class CartItemServiceImpl implements CartItemService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
+        CartItem oldCartItem = cartItemRepository.findByUserIdAndProductId(user.getId(), product.getId());
+
+        if (oldCartItem != null && oldCartItem.getSize().equals(request.getSize())) {
+            oldCartItem.setQuantity(oldCartItem.getQuantity() + request.getQuantity());
+            return cartItemMapper.toCartItemResponse(cartItemRepository.save(oldCartItem));
+        }
+
         CartItem cartItem = cartItemMapper.toCartItem(request);
         cartItem.setProduct(product);
         cartItem.setUser(user);
@@ -42,9 +48,21 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    @PreAuthorize("@securityService.isCartItemOwner(#cartItemId)")
     public void deleteCartItem(String cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
-        cartItemRepository.delete(cartItem);
+        cartItemRepository.deleteById(cartItemId);
+    }
+
+    @Override
+    public List<CartItemResponse> getMyCartItem() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return cartItemRepository.findByUserId(user.getId())
+                .stream()
+                .map(cartItemMapper::toCartItemResponse)
+                .toList();
     }
 }
