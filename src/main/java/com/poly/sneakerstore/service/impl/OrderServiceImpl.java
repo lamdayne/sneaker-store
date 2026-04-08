@@ -15,6 +15,7 @@ import com.poly.sneakerstore.repository.OrderRepository;
 import com.poly.sneakerstore.repository.UserRepository;
 import com.poly.sneakerstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,10 +33,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse createOrder(CreateOrderRequest request) {
-        User user = userRepository.findById(request.getUserId())
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        Address address = addressRepository.findById(request.getShippingAddressId())
+        Address address = addressRepository.findByIdAndUserId(request.getShippingAddressId(), user.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
 
         Order order = orderMapper.toOrder(request);

@@ -11,8 +11,6 @@ import java.util.List;
 @Setter
 
 public class CreateOrderRequest {
-    @NotBlank(message = "USER_ID_NOT_BLANK")
-    private String userId;
 
     @NotBlank(message = "ADDRESS_ID_NOT_BLANK")
     private String shippingAddressId;

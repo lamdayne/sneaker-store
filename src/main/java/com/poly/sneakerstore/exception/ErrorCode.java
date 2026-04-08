@@ -67,6 +67,8 @@ public enum ErrorCode {
     CART_ITEM_NOT_FOUND(10054, "Cart item not found", HttpStatus.NOT_FOUND),
     UNAUTHORIZED(10055, "You do not have permission", HttpStatus.FORBIDDEN),
     PASSWORD_CAN_NOT_BLANK(10056, "Password cannot be blank", HttpStatus.BAD_REQUEST),
+    OUT_OF_STOCK(10057, "Out of stock", HttpStatus.BAD_REQUEST),
+    PRODUCT_VARIANT_NOT_FOUND(10058, "Product variant not found", HttpStatus.NOT_FOUND),
     ;
     private int status;
     private String message;

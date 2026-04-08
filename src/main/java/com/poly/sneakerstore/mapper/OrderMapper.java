@@ -10,8 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "shippingAddress.id", source = "shippingAddressId")
     Order toOrder(CreateOrderRequest request);
 
     @Mapping(source = "user.id", target = "userId")
