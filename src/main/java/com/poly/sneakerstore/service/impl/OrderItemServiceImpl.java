@@ -7,16 +7,12 @@ import com.poly.sneakerstore.dto.response.OrderItemResponse;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
 import com.poly.sneakerstore.mapper.OrderItemMapper;
-import com.poly.sneakerstore.model.Order;
-import com.poly.sneakerstore.model.OrderItem;
-import com.poly.sneakerstore.model.Product;
-import com.poly.sneakerstore.model.ProductVariant;
-import com.poly.sneakerstore.repository.OrderItemRepository;
-import com.poly.sneakerstore.repository.OrderRepository;
-import com.poly.sneakerstore.repository.ProductVariantRepository;
+import com.poly.sneakerstore.model.*;
+import com.poly.sneakerstore.repository.*;
 import com.poly.sneakerstore.service.OrderItemService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,55 +20,50 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
+
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final ProductVariantRepository productVariantRepository;
+    private final ProductRepository productRepository;
     private final OrderItemMapper orderItemMapper;
+    private final UserRepository userRepository;
+    private final ProductVariantRepository productVariantRepository;
 
     @Override
     @Transactional
     public OrderItemResponse create(CreateOrderItemRequest request) {
-       
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
         Order order = orderRepository.findById(request.getOrderId())
                 .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
-        ProductVariant variant = productVariantRepository.findById(request.getVariantId())
-                .orElseThrow(() -> new AppException(ErrorCode.VARIANT_NOT_FOUND));
-
-        Product product = variant.getProduct();
-
-        if (variant.getStockQuantity() < request.getQuantity()) {
-            throw new AppException(ErrorCode.STOCK_INVALID);
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
-        Double price = (variant.getPriceOverride() != null && variant.getPriceOverride() != 0)
-                ? variant.getPriceOverride()
-                : product.getBasePrice();
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        if (price == null || price <= 0) {
-            throw new AppException(ErrorCode.PRODUCT_PRICE_NOT_BLANK);
+        ProductVariant productVariant = productVariantRepository
+                .findByProductIdAndColor(product.getId(), request.getColor())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_VARIANT_NOT_FOUND));
+
+        if (productVariant.getStockQuantity() < request.getQuantity()) {
+            throw new AppException(ErrorCode.OUT_OF_STOCK);
         }
 
-        Double total = price * request.getQuantity();
+        productVariant.setStockQuantity(productVariant.getStockQuantity() - request.getQuantity());
+        productVariantRepository.save(productVariant);
 
-        OrderItem item = OrderItem.builder()
-                .order(order)
-                .variant(variant)
-                .productName(product.getName())
-                .size(variant.getSize())
-                .color(variant.getColor())
-                .quantity(request.getQuantity())
-                .unitPrice(price)
-                .totalPrice(total)
-                .build();
+        OrderItem orderItem = orderItemMapper.toOrderItem(request);
+        orderItem.setOrder(order);
+        orderItem.setProduct(product);
 
-        variant.setStockQuantity(
-                variant.getStockQuantity() - request.getQuantity()
-        );
+        orderItem.setTotalPrice(orderItem.getUnitPrice() * request.getQuantity());
 
-        OrderItem saved = orderItemRepository.save(item);
-
-        return orderItemMapper.toResponse(saved);
+        return orderItemMapper.toResponse(orderItemRepository.save(orderItem));
     }
 
     @Override

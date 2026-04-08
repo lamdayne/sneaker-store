@@ -12,10 +12,19 @@ public class CreateOrderItemRequest {
     private String orderId;
 
     @NotBlank(message = "VARIANT_ID_NOT_BLANK")
-    private String variantId;
+    private String productId;
 
+    @NotBlank(message = "SIZE_NOT_BLANK")
+    private String size;
+
+    @NotBlank(message = "COLOR_NOT_BLANK")
+    private String color;
 
     @NotNull(message = "QUANTITY_NOT_NULL")
     @Min(value = 1, message = "QUANTITY_INVALID")
     private Integer quantity;
+
+    @NotNull(message = "UNIT_PRICE_NOT_NULL")
+    @Min(value = 1, message = "UNIT_PRICE_INVALID")
+    private Double unitPrice;
 }

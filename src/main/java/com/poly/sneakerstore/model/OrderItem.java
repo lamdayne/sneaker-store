@@ -20,13 +20,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variant_id")
-    private ProductVariant variant;
-
-    @Column(name = "product_name")
-    private String productName;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     private String size;
     private String color;

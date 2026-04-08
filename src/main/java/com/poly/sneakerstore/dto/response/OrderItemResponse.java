@@ -10,8 +10,7 @@ public class OrderItemResponse {
 
     private String id;
     private String orderId;
-    private String variantId;
-    private String productName;
+    private CartProductResponse product;
     private String size;
     private String color;
     private Integer quantity;
