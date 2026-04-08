@@ -31,5 +31,4 @@ public class CreateAddressRequest {
     private String streetAddress;
 
     private boolean defaultAddress;
-    private String userId;
 }
