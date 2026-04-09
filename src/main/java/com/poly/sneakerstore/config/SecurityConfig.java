@@ -30,7 +30,8 @@ public class SecurityConfig {
             "/users",
             "/auth/token",
             "/auth/introspect",
-            "/auth/logout"
+            "/auth/logout",
+            "/webhook/payos"
     };
 
     private final String[] RESOURCE_PUBLIC_ENDPOINTS = {

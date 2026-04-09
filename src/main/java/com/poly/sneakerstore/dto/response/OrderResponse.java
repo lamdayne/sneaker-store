@@ -22,7 +22,7 @@ public class OrderResponse {
     private String status;
     private String paymentMethod;
     private String paymentStatus;
-
+    private UserResponse user;
     private String note;
     private List<OrderItemResponse> orderItems;
     private LocalDateTime createdAt;
