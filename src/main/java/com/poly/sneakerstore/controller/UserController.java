@@ -60,4 +60,13 @@ public class UserController {
         );
     }
 
+    @PatchMapping("/{userId}")
+    public ResponseSuccess changeStatus(@PathVariable String userId, boolean status){
+        userService.changeStatus(userId, status);
+        return new ResponseSuccess(
+                HttpStatus.ACCEPTED,
+                "Change status successfully"
+        );
+    }
+
 }

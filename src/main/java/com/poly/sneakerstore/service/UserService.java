@@ -14,4 +14,5 @@ public interface UserService {
     UserResponse getUserById(String userId);
     PageResponse<?> getAllUsers(int pageNo, int pageSize, String sortBy);
     UserResponse myInfo();
+    void changeStatus(String userId, boolean status);
 }

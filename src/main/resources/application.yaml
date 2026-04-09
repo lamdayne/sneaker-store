@@ -14,3 +14,12 @@ cloudinary:
 jwt:
   signer-key: ${SIGNER_KEY}
   expiry-duration: ${EXPIRY_DURATION}
+
+payment:
+  payOs:
+    client_id: ${PAYOS_CLIENT_ID}
+    api_key: ${PAYOS_API_KEY}
+    checksum_key: ${PAYOS_CHECKSUM_KEY}
+    cancel_url: ${APP_DOMAIN}/cancel
+    return_url: ${APP_DOMAIN}/home
+    bankId: 970422
