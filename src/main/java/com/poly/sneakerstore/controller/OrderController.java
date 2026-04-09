@@ -67,4 +67,13 @@ public class OrderController {
                 orderService.getAllOrders()
         );
     }
+
+    @GetMapping("/me/all")
+    public ResponseSuccess getAllMe() {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Get all order successfully",
+                orderService.getAllMyOrders()
+        );
+    }
 }

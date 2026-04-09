@@ -88,4 +88,15 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findAll();
         return orderMapper.toOrderResponse(orders);
     }
+
+    @Override
+    public List<OrderResponse> getAllMyOrders() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        List<Order> orders = orderRepository.findAllByUserId(user.getId());
+        return orderMapper.toOrderResponse(orders);
+    }
 }
