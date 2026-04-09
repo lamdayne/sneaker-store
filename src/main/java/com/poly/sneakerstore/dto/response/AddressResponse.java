@@ -1,5 +1,6 @@
 package com.poly.sneakerstore.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,4 +16,6 @@ public class AddressResponse {
     private String streetAddress;
     private boolean defaultAddress;
     private String userId;
+    @JsonProperty("isActive")
+    private boolean active;
 }
