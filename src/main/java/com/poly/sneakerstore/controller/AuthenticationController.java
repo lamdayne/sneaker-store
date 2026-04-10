@@ -1,8 +1,10 @@
 package com.poly.sneakerstore.controller;
 
+import com.nimbusds.jose.JOSEException;
 import com.poly.sneakerstore.dto.request.AuthenticationRequest;
 import com.poly.sneakerstore.dto.request.IntrospectRequest;
 import com.poly.sneakerstore.dto.request.LogoutRequest;
+import com.poly.sneakerstore.dto.request.RefreshTokenRequest;
 import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.AuthenticationService;
 import com.poly.sneakerstore.service.UserService;
@@ -12,6 +14,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/auth")
@@ -56,6 +60,15 @@ public class AuthenticationController {
                 HttpStatus.OK,
                 "My info successfully",
                 userService.myInfo()
+        );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseSuccess refreshToken(RefreshTokenRequest request) throws ParseException, JOSEException {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Refresh Token",
+                authenticationService.refreshToken(request)
         );
     }
 }

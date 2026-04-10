@@ -41,4 +41,13 @@ public class CartItemController {
         );
     }
 
+    @PostMapping("/me/clear")
+    public ResponseSuccess clearMyCart() {
+        cartItemService.clearMyCart();
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Clear cart items successfully"
+        );
+    }
+
 }

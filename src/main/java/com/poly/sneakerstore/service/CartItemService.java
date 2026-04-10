@@ -9,4 +9,5 @@ public interface CartItemService {
     CartItemResponse addCartItem(AddCartItemRequest request);
     void deleteCartItem(String cartItemId);
     List<CartItemResponse> getMyCartItem();
+    void clearMyCart();
 }
