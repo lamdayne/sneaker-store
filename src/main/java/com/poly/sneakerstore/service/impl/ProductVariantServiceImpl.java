@@ -28,6 +28,18 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     public ProductVariantResponse createVariant(CreateProductVariantRequest request) {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+        boolean isExisted = variantRepository.existsByProductIdAndSizeAndColorAndColorHexAndStockQuantityAndPriceOverride(
+                request.getProductId(),
+                request.getSize(),
+                request.getColor(),
+                request.getColorHex(),
+                request.getStockQuantity(),
+                request.getPriceOverride()
+        );
+
+        if (isExisted) {
+            throw new AppException(ErrorCode.VARIANT_EXISTS);
+        }
 
         ProductVariant variant = variantMapper.toEntity(request);
         variant.setProduct(product);
