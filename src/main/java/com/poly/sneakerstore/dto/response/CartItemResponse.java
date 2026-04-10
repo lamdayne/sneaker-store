@@ -1,9 +1,6 @@
 package com.poly.sneakerstore.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,9 +8,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CartItemResponse {
     private String id;
-    private String cartId;
-    private String variantId;
+    private String userId;
+    private CartProductResponse product;
+    private String color;
+    private String size;
     private int quantity;
     private double unitPrice;
-    private LocalDateTime addedAt;
 }

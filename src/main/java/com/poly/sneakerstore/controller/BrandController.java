@@ -53,11 +53,15 @@ public class BrandController {
     }
 
     @GetMapping
-    public ResponseSuccess getAllBrands() {
+    public ResponseSuccess getAllBrands(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "8", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get all brands successfully",
-                brandService.findAllBrands()
+                brandService.findAllBrands(pageNo, pageSize, sortBy)
         );
     }
 

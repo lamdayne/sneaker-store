@@ -2,6 +2,7 @@ package com.poly.sneakerstore.mapper;
 
 import com.poly.sneakerstore.dto.request.CreateProductRequest;
 import com.poly.sneakerstore.dto.request.UpdateProductRequest;
+import com.poly.sneakerstore.dto.response.CartProductResponse;
 import com.poly.sneakerstore.dto.response.ProductImageResponse;
 import com.poly.sneakerstore.dto.response.ProductResponse;
 import com.poly.sneakerstore.dto.response.ProductVariantResponse;
@@ -33,6 +34,10 @@ public interface ProductMapper {
 
     @Mapping(source = "product.id", target = "productId")
     ProductVariantResponse toVariantResponse(ProductVariant variant);
+
+    @Mapping(source = "brand.name", target = "brandName")
+    @Mapping(target = "thumbnail", expression = "java(getThumbnail(product))")
+    CartProductResponse toCartProductResponse(Product product);
 
     default String getThumbnail(Product product) {
         if (product.getProductImages() == null) return null;

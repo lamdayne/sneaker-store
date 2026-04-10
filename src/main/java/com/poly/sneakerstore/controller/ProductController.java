@@ -6,6 +6,7 @@ import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,11 +51,28 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseSuccess getAllProducts() {
+    public ResponseSuccess getAllProducts(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "8", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get all product successfully",
-                productService.findAll()
+                productService.findAll(pageNo, pageSize, sortBy)
+        );
+    }
+
+    @GetMapping("/search")
+    public ResponseSuccess searchProducts(
+            Pageable pageable,
+            @RequestParam(required = false) String[] product,
+            @RequestParam(required = false) String[] variant
+    ) {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Search product successfully",
+                productService.search(pageable, product, variant)
         );
     }
 

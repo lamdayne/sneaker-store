@@ -22,6 +22,8 @@ public class Address {
     private String streetAddress;
     @Column(name = "is_default")
     private boolean defaultAddress;
+    @Column(name = "is_active")
+    private boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -22,6 +22,7 @@ public class UpdateUserRequest {
     private String phone;
 
     @Size(min = 8, message = "PASSWORD_INVALID")
+    @NotBlank(message = "PASSWORD_CAN_NOT_BLANK")
     private String password;
     private String avatarUrl;
     private boolean active;

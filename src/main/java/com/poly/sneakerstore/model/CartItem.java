@@ -19,19 +19,20 @@ public class CartItem {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "variant_id", nullable = false)
-    private ProductVariant variant;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    private String color;
+
+    private String size;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(name = "unit_price", nullable = false)
     private double unitPrice;
-
-    @Column(name = "added_at")
-    private LocalDateTime addedAt;
 }

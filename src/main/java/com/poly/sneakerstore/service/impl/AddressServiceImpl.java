@@ -12,6 +12,8 @@ import com.poly.sneakerstore.repository.AddressRepository;
 import com.poly.sneakerstore.repository.UserRepository;
 import com.poly.sneakerstore.service.AddressService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,30 +28,50 @@ public class AddressServiceImpl implements AddressService {
     private final AddressMapper addressMapper;
 
     @Override
+    @Transactional
     public AddressResponse createAddress(CreateAddressRequest request) {
-        User user = userRepository.findById(request.getUserId())
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (request.isDefaultAddress()) {
+            addressRepository.clearDefaultAddress(user.getId());
+        }
         Address address = addressMapper.toAddress(request);
         address.setUser(user);
+        address.setActive(true);
         return addressMapper.toAddressResponse(addressRepository.save(address));
     }
 
     @Override
+    @Transactional
+    @PreAuthorize("@securityService.isAddressOwner(#addressId)")
     public AddressResponse updateAddress(String addressId, UpdateAddressRequest request) {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
+
+        if (request.isDefaultAddress()) {
+            addressRepository.clearDefaultAddress(address.getId());
+        }
+
         addressMapper.updateAddress(address, request);
+
         return addressMapper.toAddressResponse(addressRepository.save(address));
     }
 
     @Override
+    @PreAuthorize("@securityService.isAddressOwner(#addressId)")
     public void deleteAddress(String addressId) {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
-        addressRepository.delete(address);
+
+        address.setActive(false);
+        addressRepository.save(address);
     }
 
     @Override
+    @PreAuthorize("@securityService.isAddressOwner(#addressId)")
     public AddressResponse getAddressById(String addressId) {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new AppException(ErrorCode.ADDRESS_NOT_FOUND));
