@@ -14,8 +14,12 @@ public class CreateUserRequest {
     private String fullName;
     @NotBlank(message = "EMAIL_NOT_BLANK")
     private String email;
+
     @Size(min = 10, message = "PHONE_INVALID")
+    @NotBlank(message = "PHONE_CAN_NOT_BLANK")
     private String phone;
+
     @Size(min = 8, message = "PASSWORD_INVALID")
+    @NotBlank(message = "PASSWORD_CAN_NOT_BLANK")
     private String password;
 }
