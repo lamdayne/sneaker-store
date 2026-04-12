@@ -1,5 +1,6 @@
 package com.poly.sneakerstore.service.impl;
 
+import com.poly.sneakerstore.dto.request.ChangePasswordRequest;
 import com.poly.sneakerstore.dto.request.CreateUserRequest;
 import com.poly.sneakerstore.dto.request.UpdateUserRequest;
 import com.poly.sneakerstore.dto.response.PageResponse;
@@ -7,11 +8,15 @@ import com.poly.sneakerstore.dto.response.UserResponse;
 import com.poly.sneakerstore.exception.AppException;
 import com.poly.sneakerstore.exception.ErrorCode;
 import com.poly.sneakerstore.mapper.UserMapper;
+import com.poly.sneakerstore.model.ForgotPasswordOtp;
 import com.poly.sneakerstore.model.Role;
 import com.poly.sneakerstore.model.User;
+import com.poly.sneakerstore.repository.ForgotPasswordOtpRepository;
 import com.poly.sneakerstore.repository.UserRepository;
+import com.poly.sneakerstore.service.MailService;
 import com.poly.sneakerstore.service.UserService;
 import com.poly.sneakerstore.util.PageableUtil;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +26,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -32,6 +40,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PageableUtil pageableUtil;
+    private final MailService mailService;
+    private final ForgotPasswordOtpRepository forgotPasswordOtpRepository;
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {
@@ -120,6 +130,36 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         user.setActive(status);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void forgotPassword(String email) throws MessagingException, UnsupportedEncodingException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        SecureRandom random = new SecureRandom();
+        String code = String.format("%06d", random.nextInt(1000000));
+        ForgotPasswordOtp otp = ForgotPasswordOtp.builder()
+                .code(code)
+                .email(email)
+                .expiryTime(LocalDateTime.now().plusMinutes(5))
+                .build();
+
+        forgotPasswordOtpRepository.save(otp);
+        mailService.sendLinkChangePassword(email, code);
+    }
+
+    @Override
+    public void changePasswordForgot(ChangePasswordRequest request) {
+        if (!forgotPasswordOtpRepository.existsByCodeAndEmail(request.getCode(), request.getEmail())) {
+            throw new AppException(ErrorCode.INVALID_CODE_EMAIL);
+        }
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
     }
 }

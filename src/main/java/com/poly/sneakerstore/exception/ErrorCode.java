@@ -69,6 +69,9 @@ public enum ErrorCode {
     PASSWORD_CAN_NOT_BLANK(10056, "Password cannot be blank", HttpStatus.BAD_REQUEST),
     OUT_OF_STOCK(10057, "Out of stock", HttpStatus.BAD_REQUEST),
     PRODUCT_VARIANT_NOT_FOUND(10058, "Product variant not found", HttpStatus.NOT_FOUND),
+    PHONE_CAN_NOT_BLANK(10059, "Phone number cannot be blank", HttpStatus.BAD_REQUEST),
+    CODE_CAN_NOT_BLANK(10060, "Code cannot be blank", HttpStatus.BAD_REQUEST),
+    INVALID_CODE_EMAIL(10061, "Invalid code and email", HttpStatus.BAD_REQUEST),
     ;
     private int status;
     private String message;
