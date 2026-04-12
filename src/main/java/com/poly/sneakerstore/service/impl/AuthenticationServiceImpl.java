@@ -156,7 +156,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private String generateRefreshToken(User user) {
-        return generateToken(user, 24 * 7);
+        return generateToken(user, expiryDuration);
     }
 
     private String generateToken(User user, long time) {

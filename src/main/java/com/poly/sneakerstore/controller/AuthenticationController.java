@@ -64,7 +64,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseSuccess refreshToken(RefreshTokenRequest request) throws ParseException, JOSEException {
+    public ResponseSuccess refreshToken(@RequestBody RefreshTokenRequest request) throws ParseException, JOSEException {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Refresh Token",
