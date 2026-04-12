@@ -5,6 +5,19 @@ spring:
     password: ${DB_PASS}
   jpa:
     show-sql: true
+  mail:
+    client-domain: ${CLIENT_DOMAIN}
+    from: ${MAIL_FROM}
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 cloudinary:
   api_key: ${CLOUDINARY_API_KEY}
@@ -14,3 +27,12 @@ cloudinary:
 jwt:
   signer-key: ${SIGNER_KEY}
   expiry-duration: ${EXPIRY_DURATION}
+
+payment:
+  payOs:
+    client_id: ${PAYOS_CLIENT_ID}
+    api_key: ${PAYOS_API_KEY}
+    checksum_key: ${PAYOS_CHECKSUM_KEY}
+    cancel_url: ${APP_DOMAIN}/cancel
+    return_url: ${APP_DOMAIN}/home
+    bankId: 970422

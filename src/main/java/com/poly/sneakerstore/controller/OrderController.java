@@ -60,11 +60,51 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseSuccess getAll() {
+    public ResponseSuccess getAll(
+            @RequestParam(defaultValue = "0", required = false) int pageNo,
+            @RequestParam(defaultValue = "8", required = false) int pageSize,
+            @RequestParam(required = false) String sortBy
+    ) {
         return new ResponseSuccess(
                 HttpStatus.OK,
                 "Get all order successfully",
-                orderService.getAllOrders()
+                orderService.getAllOrders(pageNo, pageSize, sortBy)
+        );
+    }
+
+    @GetMapping("/me/all")
+    public ResponseSuccess getAllMe() {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Get all order successfully",
+                orderService.getAllMyOrders()
+        );
+    }
+
+    @GetMapping("{orderCode}/payment-status")
+    public ResponseSuccess checkOrderStatus(@PathVariable String orderCode) {
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Get payment status success",
+                orderService.getPaymentStatusByOrderCode(orderCode)
+        );
+    }
+
+    @PostMapping("/cancel/{orderCode}")
+    public ResponseSuccess cancelOrder(@PathVariable String orderCode) {
+        orderService.cancelOrder(orderCode);
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Cancel order successfully"
+        );
+    }
+
+    @PostMapping("/status/{orderCode}")
+    public ResponseSuccess changeStatus(@PathVariable String orderCode, @RequestParam String status) {
+        orderService.changeStatus(orderCode, status);
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Change status successfully"
         );
     }
 }

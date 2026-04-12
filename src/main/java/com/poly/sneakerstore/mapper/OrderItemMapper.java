@@ -1,5 +1,6 @@
 package com.poly.sneakerstore.mapper;
 
+import com.poly.sneakerstore.dto.request.CreateOrderItemRequest;
 import com.poly.sneakerstore.dto.request.UpdateOrderItemRequest;
 import com.poly.sneakerstore.dto.response.OrderItemResponse;
 import com.poly.sneakerstore.model.OrderItem;
@@ -7,10 +8,10 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ProductMapper.class)
 public interface OrderItemMapper {
+    OrderItem toOrderItem(CreateOrderItemRequest request);
 
-    @Mapping(source = "variant.id", target = "variantId")
     @Mapping(source = "order.id", target = "orderId")
     OrderItemResponse toResponse(OrderItem item);
 

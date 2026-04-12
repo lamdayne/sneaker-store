@@ -1,15 +1,21 @@
 package com.poly.sneakerstore.controller;
 
+import com.poly.sneakerstore.dto.request.ChangePasswordRequest;
 import com.poly.sneakerstore.dto.request.CreateUserRequest;
 import com.poly.sneakerstore.dto.request.UpdateUserRequest;
 import com.poly.sneakerstore.dto.response.ResponseSuccess;
 import com.poly.sneakerstore.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @RestController
@@ -57,6 +63,33 @@ public class UserController {
                 HttpStatus.OK,
                 "Get users successfully",
                 userService.getAllUsers(pageNo, pageSize, sortBy)
+        );
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseSuccess changeStatus(@PathVariable String userId, boolean status){
+        userService.changeStatus(userId, status);
+        return new ResponseSuccess(
+                HttpStatus.ACCEPTED,
+                "Change status successfully"
+        );
+    }
+
+    @PostMapping("/forgot")
+    public ResponseSuccess forgotPassword(@RequestParam @NotBlank(message = "EMAIL_NOT_BLANK") String email) throws MessagingException, UnsupportedEncodingException {
+        userService.forgotPassword(email);
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Forgot password successfully"
+        );
+    }
+
+    @PostMapping("/change-password")
+    public ResponseSuccess changePassword(@RequestBody @Valid ChangePasswordRequest request){
+        userService.changePasswordForgot(request);
+        return new ResponseSuccess(
+                HttpStatus.OK,
+                "Change password successfully"
         );
     }
 

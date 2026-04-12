@@ -65,4 +65,14 @@ public class CartItemServiceImpl implements CartItemService {
                 .map(cartItemMapper::toCartItemResponse)
                 .toList();
     }
+
+    @Override
+    public void clearMyCart() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        cartItemRepository.deleteAllByUserId(user.getId());
+    }
 }
