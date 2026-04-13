@@ -71,7 +71,9 @@ public enum ErrorCode {
     PRODUCT_VARIANT_NOT_FOUND(10058, "Product variant not found", HttpStatus.NOT_FOUND),
     PHONE_CAN_NOT_BLANK(10059, "Phone number cannot be blank", HttpStatus.BAD_REQUEST),
     CODE_CAN_NOT_BLANK(10060, "Code cannot be blank", HttpStatus.BAD_REQUEST),
-    INVALID_CODE_EMAIL(10061, "Invalid code and email", HttpStatus.BAD_REQUEST),
+    INVALID_CODE_EMAIL(10061, "Invalid code or email", HttpStatus.BAD_REQUEST),
+    OTP_EXPIRED(10062, "OTP expired", HttpStatus.BAD_REQUEST),
+    VARIANT_EXISTS(10063, "Product variant with these details already exists", HttpStatus.BAD_REQUEST),
     ;
     private int status;
     private String message;

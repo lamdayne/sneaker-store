@@ -34,7 +34,9 @@ public class SecurityConfig {
             "/webhook/payos",
             "/auth/refresh",
             "/users/forgot",
-            "/users/change-password"
+            "/users/change-password",
+            "/product-images",
+            "/product-variants"
     };
 
     private final String[] RESOURCE_PUBLIC_ENDPOINTS = {
@@ -45,7 +47,8 @@ public class SecurityConfig {
             "/products/search/**",
             "/categories",
             "/categories/**",
-            "/cart-items/**"
+            "/cart-items/**",
+            "/revenue/statistic"
     };
 
     @Bean

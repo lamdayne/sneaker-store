@@ -12,4 +12,7 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     List<ProductVariant> findByProductId(String productId);
 
     Optional<ProductVariant> findByProductIdAndColor(String productId, String color);
+
+    boolean existsByProductIdAndSizeAndColorAndColorHexAndStockQuantityAndPriceOverride(
+            String productId, String size, String color, String colorHex, Integer stockQuantity, Double priceOverride);
 }
