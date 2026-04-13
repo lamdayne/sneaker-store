@@ -8,6 +8,7 @@ import com.poly.sneakerstore.mapper.CartItemMapper;
 import com.poly.sneakerstore.model.*;
 import com.poly.sneakerstore.repository.*;
 import com.poly.sneakerstore.service.CartItemService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,6 +68,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    @Transactional
     public void clearMyCart() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 

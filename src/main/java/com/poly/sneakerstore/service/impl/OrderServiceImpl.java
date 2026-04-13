@@ -91,7 +91,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<?> getAllOrders(int pageNo, int pageSize, String sortBy) {
         Pageable pageable = pageableUtil.createPageable(pageNo, pageSize, sortBy);
         Page<Order> page = orderRepository.findAll(pageable);

@@ -152,8 +152,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePasswordForgot(ChangePasswordRequest request) {
-        if (!forgotPasswordOtpRepository.existsByCodeAndEmail(request.getCode(), request.getEmail())) {
-            throw new AppException(ErrorCode.INVALID_CODE_EMAIL);
+        ForgotPasswordOtp otp = forgotPasswordOtpRepository.findByCodeAndEmail(request.getCode(), request.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_CODE_EMAIL));
+
+        if (otp.getExpiryTime().isBefore(LocalDateTime.now())) {
+            throw new AppException(ErrorCode.OTP_EXPIRED);
         }
 
         User user = userRepository.findByEmail(request.getEmail())
